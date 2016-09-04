@@ -6,6 +6,7 @@ use App\Mailers\AppMailer;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\User;
 use App\Ticket;
 use Illuminate\Support\Facades\Auth;
 use App\Category;
@@ -17,13 +18,22 @@ class TicketsController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create(){
+    public function create()
+    {
         $categories = Category::all();
 
         return view('tickets.create', compact('categories'));
     }
 
-    public function store(Request $request, AppMailer $mailer){
+    /**
+     * Action store, to store a ticket on the DB
+     *
+     * @param Request $request
+     * @param AppMailer $mailer
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request, AppMailer $mailer)
+    {
         $this->validate($request, [
             'title' => 'required',
             'category' => 'required',
@@ -47,4 +57,18 @@ class TicketsController extends Controller
 
         return redirect()->back()->with('status', "A ticket with ID: #$ticket->ticket_id has been opened.");
     }
+
+    /**
+     * Action to show the current user's tickets
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function userTickets()
+    {
+        $tickets = Ticket::where('user_id', Auth::user()->id)->paginate(10);
+        $categories = Category::all();
+
+        return view('tickets.user_tickets', compact('tickets', 'categories'));
+    }
+
 }
