@@ -31,3 +31,8 @@ Route::get('tickets/{ticket_id}', 'TicketsController@show');
  * Comments routes
  */
 Route::post('comment', 'CommentsController@postComment');
+
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function (){
+    Route::get('tickets', 'TicketsController@index');
+    Route::post('close_ticket/{ticket_id}', 'TicketsController@close');
+});
