@@ -13,6 +13,17 @@ use App\Category;
 
 class TicketsController extends Controller
 {
+
+    /**
+     * Only registered users can access these actions.
+     *
+     * TicketsController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Action create
      *
