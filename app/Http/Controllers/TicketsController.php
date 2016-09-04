@@ -71,4 +71,19 @@ class TicketsController extends Controller
         return view('tickets.user_tickets', compact('tickets', 'categories'));
     }
 
+    /**
+     * Action to show just one ticket by id
+     *
+     * @param $ticket_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show($ticket_id)
+    {
+        $ticket = Ticket::where('ticket_id', $ticket_id)->firstOrFail();
+
+        $category = $ticket->category;
+
+        return view('tickets.show', compact('ticket', 'category'));
+    }
+
 }
